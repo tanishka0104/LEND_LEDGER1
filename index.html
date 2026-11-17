@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7faf8">
+  <title>LendLedger | Lending made clear</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-art">
+      <div class="auth-brand"><span class="brand-icon">L</span><span>LendLedger</span></div>
+      <div class="auth-message">
+        <span class="eyebrow light">YOUR PERSONAL LENDING SPACE</span>
+        <h1>Every loan.<br>Every promise.<br><em>One clear picture.</em></h1>
+        <p>Keep borrower details, repayment dates and payment history organized in one calm workspace.</p>
+        <div class="auth-mini-stats">
+          <div><b>01</b><span>Track lending</span></div>
+          <div><b>02</b><span>Follow repayments</span></div>
+          <div><b>03</b><span>Stay on schedule</span></div>
+        </div>
+      </div>
+      <div class="auth-art-footer">A simpler way to stay on top of what’s owed.</div>
+    </div>
+
+    <div class="auth-panel">
+      <div class="auth-mobile-brand"><span class="brand-icon">L</span><b>LendLedger</b></div>
+      <div class="auth-box">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth="login">Sign in</button>
+          <button class="auth-tab" data-auth="register">Create account</button>
+        </div>
+        <p class="eyebrow" id="authEyebrow">WELCOME BACK</p>
+        <h2 id="authTitle">Sign in to your workspace</h2>
+        <p class="muted" id="authSubtitle">Your lending overview is right where you left it.</p>
+        <form id="authForm">
+          <label id="nameField" class="hidden">Your name
+            <input id="authName" autocomplete="name" placeholder="Your name">
+          </label>
+          <label>Email address
+            <input id="authEmail" type="email" autocomplete="username" required placeholder="you@example.com">
+          </label>
+          <label>Password
+            <input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters">
+          </label>
+          <button class="btn primary full" id="authSubmit" type="submit">Sign in <span>→</span></button>
+          <p class="auth-error" id="authError" role="alert"></p>
+        </form>
+        <p class="auth-legal">Demo mode: account information is stored in this browser only. Do not use a password you use elsewhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#">
+        <span class="brand-icon">L</span>
+        <span>LendLedger<small>PERSONAL FINANCE</small></span>
+      </a>
+
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav">
+        <button class="nav-link active" data-page="overview"><span>▦</span> Overview</button>
+        <button class="nav-link" data-page="borrowers"><span>♙</span> Borrowers</button>
+        <button class="nav-link" data-page="calendar"><span>▦</span> Repayment calendar</button>
+        <button class="nav-link" data-page="history"><span>↗</span> Payment history</button>
+        <button class="nav-link" data-page="notifications"><span>♧</span> Notifications <span class="nav-badge" id="navNotificationCount" hidden>0</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="side-help">
+          <span class="help-icon">✦</span>
+          <b>Stay organized</b>
+          <p>Record each repayment as soon as it arrives.</p>
+        </div>
+        <button class="nav-link" id="settingsBtn"><span>⚙</span> Account settings</button>
+        <button class="nav-link logout" id="logoutBtn"><span>↪</span> Sign out</button>
+      </div>
+      <div class="sidebar-foot">LENDLEDGER <span>•</span> PERSONAL TRACKER</div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuBtn" aria-label="Open menu">☰</button>
+        <div>
+          <p class="top-date" id="todayLabel"></p>
+          <h2 id="pageTitle">Overview</h2>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn notification-btn" id="notificationBtn" title="Open notification center">♧<i id="notificationDot"></i><span class="notification-count" id="notificationCount" hidden>0</span></button>
+          <div class="user-chip">
+            <span class="avatar" id="userAvatar">U</span>
+            <span><b id="userName">User</b><small>Personal account</small></span>
+          </div>
+        </div>
+      </header>
+
+      <section class="page active" id="page-overview">
+        <div class="welcome-row">
+          <div>
+            <span class="eyebrow">YOUR MONEY, IN ONE PLACE</span>
+            <h1>Good to see you, <span id="welcomeName">there</span>.</h1>
+            <p class="muted">Here’s a snapshot of your lending activity.</p>
+          </div>
+          <button class="btn primary" id="addLoanTop">＋ Add new loan</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-top"><span>Total lent</span><span class="stat-icon green">↗</span></div>
+            <strong id="statLent">₹0</strong>
+            <small>Principal across all loans</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>Total received</span><span class="stat-icon blue">↓</span></div>
+            <strong id="statReceived">₹0</strong>
+            <small>Repayments recorded</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>Outstanding</span><span class="stat-icon amber">◷</span></div>
+            <strong id="statOutstanding">₹0</strong>
+            <small>Still to be collected</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>Active borrowers</span><span class="stat-icon violet">♙</span></div>
+            <strong id="statBorrowers">0</strong>
+            <small>With a remaining balance</small>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <article class="surface chart-card">
+            <div class="card-heading">
+              <div>
+                <span class="eyebrow">CASH FLOW</span>
+                <h3>Lending vs. repayments</h3>
+                <p class="muted">Monthly activity for the last 6 months</p>
+              </div>
+              <span class="legend"><i class="legend-lent"></i> Lent <i class="legend-received"></i> Received</span>
+            </div>
+            <canvas id="cashChart" height="250" aria-label="Lending and repayment chart"></canvas>
+          </article>
+
+          <article class="surface due-card">
+            <div class="card-heading">
+              <div>
+                <span class="eyebrow">ACTION LIST</span>
+                <h3>Next repayments</h3>
+                <p class="muted">Your nearest due dates</p>
+              </div>
+              <button class="text-btn" data-goto="calendar">View calendar →</button>
+            </div>
+            <div id="upcomingList" class="upcoming-list"></div>
+          </article>
+        </div>
+
+        <article class="surface recent-card">
+          <div class="card-heading">
+            <div>
+              <span class="eyebrow">LATEST ACTIVITY</span>
+              <h3>Recent payments</h3>
+            </div>
+            <button class="text-btn" data-goto="history">See all →</button>
+          </div>
+          <div id="recentPayments"></div>
+        </article>
+      </section>
+
+      <section class="page" id="page-borrowers">
+        <div class="page-intro">
+          <div>
+            <span class="eyebrow">PEOPLE & LOANS</span>
+            <h1>Borrowers</h1>
+            <p class="muted">A clear record of everyone you’ve lent money to.</p>
+          </div>
+          <button class="btn primary" id="addLoanBtn">＋ Add borrower</button>
+        </div>
+        <div class="toolbar">
+          <input id="borrowerSearch" type="search" placeholder="Search name or phone…">
+          <select id="borrowerFilter">
+            <option value="all">All borrowers</option>
+            <option value="active">Active loans</option>
+            <option value="overdue">Overdue</option>
+            <option value="paid">Fully repaid</option>
+          </select>
+        </div>
+        <div id="borrowerGrid" class="borrower-grid"></div>
+      </section>
+
+      <section class="page" id="page-calendar">
+        <div class="page-intro">
+          <div>
+            <span class="eyebrow">PLAN AHEAD</span>
+            <h1>Repayment calendar</h1>
+            <p class="muted">See what is due and when it is expected.</p>
+          </div>
+          <button class="btn secondary" id="calendarToday">Today</button>
+        </div>
+        <article class="surface calendar-surface">
+          <div class="calendar-head">
+            <button class="icon-btn" id="prevMonth">‹</button>
+            <h3 id="calendarMonth"></h3>
+            <button class="icon-btn" id="nextMonth">›</button>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+          <div class="calendar-legend">
+            <span><i class="dot due-dot"></i> Due date</span>
+            <span><i class="dot overdue-dot"></i> Overdue</span>
+            <span><i class="dot paid-dot"></i> Repaid</span>
+          </div>
+        </article>
+        <article class="surface selected-date-card">
+          <div class="card-heading">
+            <div><span class="eyebrow">SCHEDULE</span><h3 id="selectedDateTitle">Select a date</h3></div>
+          </div>
+          <div id="selectedDateLoans" class="upcoming-list"></div>
+        </article>
+      </section>
+
+      <section class="page" id="page-notifications">
+        <div class="page-intro">
+          <div>
+            <span class="eyebrow">ACTIVITY & REMINDERS</span>
+            <h1>Notification center</h1>
+            <p class="muted">All your borrower updates, payments and repayment reminders in one place.</p>
+          </div>
+          <button class="btn secondary" id="markAllNotificationsRead">✓ Mark all as read</button>
+        </div>
+
+        <div class="notification-stats">
+          <article class="notification-stat-card"><span>Total notifications</span><strong id="moduleTotalCount">0</strong></article>
+          <article class="notification-stat-card"><span>Unread notifications</span><strong id="moduleUnreadCount">0</strong></article>
+          <article class="notification-stat-card"><span>Read notifications</span><strong id="moduleReadCount">0</strong></article>
+        </div>
+
+        <article class="surface notification-module-panel">
+          <div class="card-heading notification-module-toolbar">
+            <div><h3>All notifications</h3><p class="muted">Your complete activity history</p></div>
+            <select id="notificationFilter" aria-label="Filter notifications">
+              <option value="all">All notifications</option>
+              <option value="unread">Unread</option>
+              <option value="read">Read</option>
+              <option value="payment">Payments</option>
+              <option value="activity">Borrower updates</option>
+              <option value="reminder">Reminders</option>
+              <option value="overdue">Overdue</option>
+            </select>
+          </div>
+          <div id="fullNotificationList" class="full-notification-list"></div>
+        </article>
+      </section>
+
+      <!-- PAYMENT HISTORY: EXPORT CSV BUTTON REMOVED -->
+      <section class="page" id="page-history">
+        <div class="page-intro">
+          <div>
+            <span class="eyebrow">TRANSACTION RECORD</span>
+            <h1>Payment history</h1>
+            <p class="muted">Every repayment you have recorded, in date order.</p>
+          </div>
+        </div>
+        <div class="toolbar">
+          <input id="historySearch" type="search" placeholder="Search borrower or payment note…">
+          <span class="result-count" id="historyCount"></span>
+        </div>
+        <article class="surface history-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Borrower</th>
+                <th>Date received</th>
+                <th>Payment note</th>
+                <th>Amount received</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable"></tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="loanModal" class="modal">
+    <form id="loanForm" class="modal-content">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow">NEW LENDING RECORD</span>
+          <h2>Add a borrower</h2>
+          <p class="muted">Enter the agreed amount and repayment terms.</p>
+        </div>
+        <button type="button" class="close-btn" data-close="loanModal">×</button>
+      </div>
+      <div class="form-grid">
+        <label>Borrower name *<input id="loanName" required maxlength="70" placeholder="Full name"></label>
+        <label>Phone / reference<input id="loanPhone" maxlength="35" placeholder="Optional contact"></label>
+        <label>Amount lent (₹) *<input id="loanAmount" type="number" min="0.01" step="0.01" required placeholder="10000"></label>
+        <label>Interest rate (% per month) *<input id="loanRate" type="number" min="0" max="100" step="0.01" value="2" required></label>
+        <label>Repayment duration *
+          <div class="inline-input">
+            <input id="loanDuration" type="number" min="1" max="600" step="1" value="1" required>
+            <select id="durationUnit">
+              <option value="months">Months</option>
+              <option value="years">Years</option>
+            </select>
+          </div>
+        </label>
+        <label>Date money was given *<input id="loanStart" type="date" required></label>
+      </div>
+      <label>Notes<textarea id="loanNotes" rows="2" maxlength="300" placeholder="Agreed terms or additional notes"></textarea></label>
+      <div class="estimate-box" id="loanEstimate">Enter an amount to preview the repayment total.</div>
+      <div class="modal-actions">
+        <button type="button" class="btn secondary" data-close="loanModal">Cancel</button>
+        <button class="btn primary" type="submit">Save loan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="paymentModal" class="modal">
+    <form id="paymentForm" class="modal-content">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow">REPAYMENT</span>
+          <h2>Record a payment</h2>
+          <p class="muted" id="paymentContext"></p>
+        </div>
+        <button type="button" class="close-btn" data-close="paymentModal">×</button>
+      </div>
+      <input id="paymentLoanId" type="hidden">
+      <div class="form-grid">
+        <label>Amount received (₹) *<input id="paymentAmount" type="number" min="0.01" step="0.01" required></label>
+        <label>Date received *<input id="paymentDate" type="date" required></label>
+      </div>
+      <label>Payment note<input id="paymentNote" maxlength="100" placeholder="Cash, bank transfer, reference…"></label>
+      <div class="modal-actions">
+        <button type="button" class="btn secondary" data-close="paymentModal">Cancel</button>
+        <button class="btn primary" type="submit">Save payment</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="profileModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow">BORROWER PROFILE</span>
+          <h2 id="profileTitle">Borrower</h2>
+          <p class="muted" id="profileSubtitle"></p>
+        </div>
+        <button class="close-btn" data-close="profileModal">×</button>
+      </div>
+      <div id="profileBody"></div>
+      <div class="modal-actions">
+        <button class="btn secondary" data-close="profileModal">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="settingsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow">PREFERENCES</span>
+          <h2>Account settings</h2>
+          <p class="muted">Manage this browser-based demo account.</p>
+        </div>
+        <button class="close-btn" data-close="settingsModal">×</button>
+      </div>
+      <div class="settings-row">
+        <div><b>Browser notifications</b><p class="muted">Show a reminder when a loan is due or overdue.</p></div>
+        <button class="btn secondary" id="settingsNotify">Enable</button>
+      </div>
+      <div class="settings-row">
+        <div><b>Export your records</b><p class="muted">Download a CSV copy of loans and repayments.</p></div>
+        <button class="btn secondary" id="settingsExport">Export CSV</button>
+      </div>
+      <div class="settings-row danger-row">
+        <div><b>Delete all lending records</b><p class="muted">This cannot be undone. Export a backup first.</p></div>
+        <button class="btn danger" id="clearData">Delete records</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
